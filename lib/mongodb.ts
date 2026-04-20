@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-
-// Define the connection cache type
 type MongooseCache = {
     conn: typeof mongoose | null;
     promise: Promise<typeof mongoose> | null;
@@ -13,15 +11,12 @@ declare global {
 }
 
 const MONGODB_URI = process.env.MONGODB_URI;
-
-
 // Initialize the cache on the global object to persist across hot reloads in development
 let cached: MongooseCache = global.mongoose || { conn: null, promise: null };
 
 if (!global.mongoose) {
     global.mongoose = cached;
 }
-
 /**
  * Establishes a connection to MongoDB using Mongoose.
  * Caches the connection to prevent multiple connections during development hot reloads.
@@ -51,9 +46,7 @@ async function connectDB(): Promise<typeof mongoose> {
         });
     }
 
-    try {
-        // Wait for the connection to establish
-        cached.conn = await cached.promise;
+    try {cached.conn = await cached.promise;
     } catch (error) {
         // Reset promise on error to allow retry
         cached.promise = null;
