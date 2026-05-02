@@ -37,16 +37,18 @@
 import ExploreBtn from "@/components/ExploreBtn";
 import EventCard from "@/components/EventCard";
 import { IEvent } from "@/database";
+import { cacheLife } from "next/cache";
 
-export const dynamic = "force-dynamic"; // ✅ runtime
+const BASE_URL = "http://localhost:3000"; // ✅ key fix
 
 const Page = async () => {
+    'use cache';
+    cacheLife('hours');
+
     let events: IEvent[] = [];
 
     try {
-        const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/events`
-        );
+        const response = await fetch(`${BASE_URL}/api/events`);
 
         if (!response.ok) throw new Error("Failed");
 
