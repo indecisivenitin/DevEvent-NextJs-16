@@ -37,35 +37,23 @@
 import ExploreBtn from "@/components/ExploreBtn";
 import EventCard from "@/components/EventCard";
 import { IEvent } from "@/database";
-import { cacheLife } from "next/cache";
 
-export const dynamic = "force-dynamic"; //  prevent build-time execution
+export const dynamic = "force-dynamic"; // ✅ runtime
 
 const Page = async () => {
-    'use cache';
-    cacheLife('hours');
-
     let events: IEvent[] = [];
 
     try {
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/events`,
-            {
-                cache: "no-store", // ensures fresh data
-            }
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/events`
         );
 
-        const text = await response.text(); // 👈 safer than .json()
+        if (!response.ok) throw new Error("Failed");
 
-        try {
-            const data = JSON.parse(text);
-            events = data.events || [];
-        } catch (err) {
-            console.error("Invalid JSON response:", text);
-        }
-
+        const data = await response.json();
+        events = data.events || [];
     } catch (err) {
-        console.error("Fetch failed:", err);
+        console.error("Fetch error:", err);
     }
 
     return (
