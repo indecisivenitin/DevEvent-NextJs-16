@@ -116,6 +116,4 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the project.
 
 
-<a href="https://jsm.dev/devevent-jsmpro" target="_blank">
-  <img src="public/readme/readme-jsmpro.webp" alt="Project Banner">
-</a>
+
